@@ -1,21 +1,47 @@
 const adventOfCode = require("./aoc");
 const data = new adventOfCode("day2.txt").data.split(/\n/).map(str => str.split(" "));
 
-const score = {
-    "opponent": 0,
-    "me": 0
-};
-
 const code = {
     "A": 1,
     "B": 2,
     "C": 3,
-    "X": 1,
-    "Y": 2,
-    "Z": 3
+    "X": 1, // part2 - lose
+    "Y": 2, // part2 - draw
+    "Z": 3 // part2 - win
 };
 
-function checkWin([opponent, me]) {
+const changePlay = (opponent, me) => {
+    if (code[me] === 2) { // draw
+        return opponent
+    }
+    if (code[me] === 1) { // lose
+        if (code[opponent] === 3) {
+            return "Y"
+        }
+        if (code[opponent] === 2) {
+            return "X"
+        }
+        if (code[opponent] === 1) {
+            return "Z"
+        }
+    }
+    if (code[me] === 3) { // win
+        if (code[opponent] === 3) {
+            return "X"
+        }
+        if (code[opponent] === 2) {
+            return "Z"
+        }
+        if (code[opponent] === 1) {
+            return "Y"
+        }
+    }
+}
+
+const checkWin = ([opponent, me], part1 = true) => {
+    if (!part1) {
+        me = changePlay(opponent, me)
+    }
     let winner = "none";
     let outcome = "win";
     if (code[opponent] === code[me]) {
@@ -40,7 +66,7 @@ function checkWin([opponent, me]) {
     };
 };
 
-const calcScore = ({ opponentPlay, myPlay, outcome, winner }) => {
+const calcScore = ({ opponentPlay, myPlay, outcome, winner }, score) => {
     if (outcome === "draw") {
         score.opponent += 3;
         score.me += 3;
@@ -54,8 +80,27 @@ const calcScore = ({ opponentPlay, myPlay, outcome, winner }) => {
     score.me += code[myPlay];
 }
 
-data.forEach(play => {
-    calcScore(checkWin(play))
-})
+const partOne = () => {
+    const score = {
+        "opponent": 0,
+        "me": 0
+    };
+    data.forEach(play => {
+        calcScore(checkWin(play), score)
+    })
+    console.log('p1 score: ', score)
+}
 
-console.log('final score: ', score)
+const partTwo = () => {
+    const score = {
+        "opponent": 0,
+        "me": 0
+    };
+    data.forEach(play => {
+        calcScore(checkWin(play, false), score)
+    })
+    console.log('p2 score: ', score)
+}
+
+partOne();
+partTwo();
