@@ -1,5 +1,6 @@
-const adventOfCode = require("./aoc");
-const data = new adventOfCode("day2.txt").data.split(/\n/).map(str => str.split(" "));
+const { rawData } = require("./aoc");
+
+const data = rawData("day2.txt").split(/\n/).map(str => str.split(" "));
 
 const code = {
     "A": 1,
