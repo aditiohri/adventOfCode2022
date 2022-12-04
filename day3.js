@@ -1,5 +1,4 @@
-const { get } = require("http");
-const { rawData, sumOfNums } = require("./aoc");
+const { rawData, sumOfNums, findRepeatingCharInMultStrs } = require("./aoc");
 
 const data = rawData("day3.txt").split(/\n/)
 
@@ -12,20 +11,7 @@ const breakInTwo = (arrOfStrs) => {
         ]
     })
 }
-// find repeating item types in both compartments
-const findRepeatingItems = (arrOfSubStrs) => {
-    return arrOfSubStrs.map(arrOfStr => { 
-        let repeatingItems = [];
-        for (let i = 0; i < arrOfStr[0].length; i++) {
-            const char = arrOfStr[0][i];
-            const charInAllOtherStrs = arrOfStr.every(str => str.includes(char))
-            if (charInAllOtherStrs && !repeatingItems.includes(char)) {
-                repeatingItems.push(char)
-            }
-        }
-        return repeatingItems;
-    }).flat()
-} 
+
 // determine value of repeating item
 const getValueOfItems = (arrOfItems) => {
     return arrOfItems.map(item => {
@@ -54,13 +40,13 @@ const getGroupsOfThree = (arrOfStrs) => {
 
 // part one
 const rucksacks = breakInTwo(data);
-const repeatingItems = findRepeatingItems(rucksacks);
+const repeatingItems = findRepeatingCharInMultStrs(rucksacks);
 const valueOfItems = getValueOfItems(repeatingItems)
 const sumOfAllItemValues = sumOfNums(valueOfItems);
 console.log(sumOfAllItemValues)
 
 //part two
 const elfGroups = getGroupsOfThree(data);
-const elfBadges = findGroupBadges(elfGroups);
+const elfBadges = findRepeatingCharInMultStrs(elfGroups);
 const sumOfBadgeValues = sumOfNums(getValueOfItems(elfBadges))
 console.log(sumOfBadgeValues)
